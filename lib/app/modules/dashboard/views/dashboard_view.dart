@@ -8,6 +8,7 @@ import '../../../data/entertainment_response.dart';
 import '../../../data/headline_response.dart';
 import '../../../data/sports_response.dart';
 import '../../../data/technology_response.dart';
+// import '../../../data/movies_response.dart';
 import '../../home/views/home_view.dart';
 import '../controllers/dashboard_controller.dart';
 
@@ -25,13 +26,13 @@ class DashboardView extends GetView<DashboardController> {
         // Widget DefaultTabController digunakan untuk mengatur tab di aplikasi.
         child: Scaffold(
           floatingActionButton: FloatingActionButton(
-  onPressed: () async {
-    await auth.erase();
-    Get.offAll(() => const HomeView());
-  },
-  backgroundColor: Colors.redAccent,
-  child: const Icon(Icons.logout_rounded),
-),
+            onPressed: () async {
+              await auth.erase();
+              Get.offAll(() => const HomeView());
+            },
+            backgroundColor: Colors.redAccent,
+            child: const Icon(Icons.logout_rounded),
+          ),
           // Widget Scaffold digunakan sebagai struktur dasar aplikasi.
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(120.0),
@@ -47,9 +48,9 @@ class DashboardView extends GetView<DashboardController> {
                     // Properti textAlign digunakan untuk menentukan perataan teks.
                   ),
                   subtitle: Text(
-                  auth.read('full_name').toString(),
-                  textAlign: TextAlign.end,
-                ),
+                    auth.read('full_name').toString(),
+                    textAlign: TextAlign.end,
+                  ),
                   trailing: Container(
                     // Widget Container digunakan untuk mengatur tampilan konten dalam kotak.
                     margin: const EdgeInsets.only(right: 10),
@@ -84,6 +85,7 @@ class DashboardView extends GetView<DashboardController> {
                       Tab(text: "Teknologi"),
                       Tab(text: "Hiburan"),
                       Tab(text: "Olahraga"),
+                      Tab(text: "profile"),
                     ],
                   ),
                 ),
@@ -98,6 +100,7 @@ class DashboardView extends GetView<DashboardController> {
               technology(controller, scrollController),
               entertainment(controller, scrollController),
               sports(controller, scrollController),
+              profile(context, controller, scrollController),
             ],
           ),
         ),
@@ -454,6 +457,176 @@ class DashboardView extends GetView<DashboardController> {
           },
         );
       },
+    );
+
+    // FutureBuilder<MoviesResponse> movies(
+    //     DashboardController controller, ScrollController scrollController) {
+    //   return FutureBuilder<MoviesResponse>(
+    //     // Mendapatkan future data headline dari controller
+    //     future: controller.getMovies(),
+    //     builder: (context, snapshot) {
+    //       // Jika koneksi masih dalam keadaan waiting/tunggu, tampilkan widget Lottie loading
+    //       if (snapshot.connectionState == ConnectionState.waiting) {
+    //         return Center(
+    //           child: Lottie.network(
+    //             // Menggunakan animasi Lottie untuk tampilan loading
+    //             'http://127.0.0.1:8000/api/Movies',
+    //             repeat: true,
+    //             width: MediaQuery.of(context).size.width / 1,
+    //           ),
+    //         );
+    //       }
+    //       // Jika tidak ada data yang diterima, tampilkan pesan "Tidak ada data"
+    //       if (!snapshot.hasData) {
+    //         return const Center(child: Text("Tidak ada data"));
+    //       }
+
+    //       // Jika data diterima, tampilkan daftar headline dalam bentuk ListView.Builder
+    //       return ListView.builder(
+    //         itemCount: snapshot.data!.data!.length,
+    //         controller: scrollController,
+    //         shrinkWrap: true,
+    //         itemBuilder: (context, index) {
+    //           // Tampilan untuk setiap item headline dalam ListView.Builder
+    //           return Container(
+    //             padding: const EdgeInsets.only(
+    //               top: 5,
+    //               left: 8,
+    //               right: 8,
+    //               bottom: 5,
+    //             ),
+    //             height: 110,
+    //             child: Row(
+    //               crossAxisAlignment: CrossAxisAlignment.start,
+    //               children: [
+    //                 // Widget untuk menampilkan gambar headline dengan menggunakan url gambar dari data yang diterima
+    //                 ClipRRect(
+    //                   borderRadius: BorderRadius.circular(8.0),
+    //                   child: Image.network(
+    //                     snapshot.data!.data![index].img.toString(),
+    //                     height: 130,
+    //                     width: 130,
+    //                     fit: BoxFit.cover,
+    //                   ),
+    //                 ),
+    //                 const SizedBox(
+    //                   width: 10,
+    //                 ),
+    //                 Expanded(
+    //                   child: Column(
+    //                     crossAxisAlignment: CrossAxisAlignment.start,
+    //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //                     children: [
+    //                       // Widget untuk menampilkan judul headline dengan menggunakan data yang diterima
+    //                       Text(
+    //                         snapshot.data!.data![index].desc.toString(),
+    //                         overflow: TextOverflow.ellipsis,
+    //                         maxLines: 2,
+    //                       ),
+    //                       const SizedBox(
+    //                         height: 2,
+    //                       ),
+    //                       // Widget untuk menampilkan informasi author dan sumber headline dengan menggunakan data yang diterima
+    //                       Column(
+    //                         crossAxisAlignment: CrossAxisAlignment.start,
+    //                         children: [
+    //                           Text(
+    //                               'Name : ${snapshot.data!.data![index].name}'),
+    //                           Text('Sumber :${snapshot.data!.data![index].name}'),
+    //                         ],
+    //                       ),
+    //                     ],
+    //                   ),
+    //                 ),
+    //               ],
+    //             ),
+    //           );
+    //         },
+    //       );
+    //     },
+    //   );
+  }
+Widget profile(BuildContext context, DashboardController controller,
+      ScrollController scrollController) {
+    double width = MediaQuery.of(context).size.height;
+    double height = MediaQuery.of(context).size.height;
+
+    return SingleChildScrollView(
+      child: Container(
+        width: width,
+        height: height,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 200,
+                height: 200,
+                child: Image.asset('assets/images/artha.jpg'),
+              ),
+            ),
+            SizedBox(
+              height: 25,
+            ),
+            Center(
+                child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  width: 50,
+                  height: 50,
+                  decoration:
+                      BoxDecoration(shape: BoxShape.circle, color: Colors.blue),
+                  child:
+                      IconButton(onPressed: () {}, icon: Icon(Icons.add_home)),
+                ),
+                Container(
+                  width: 50,
+                  height: 50,
+                  decoration:
+                      BoxDecoration(shape: BoxShape.circle, color: Colors.blue),
+                  child:
+                      IconButton(onPressed: () {}, icon: Icon(Icons.add_home)),
+                ),
+                Container(
+                  width: 50,
+                  height: 50,
+                  decoration:
+                      BoxDecoration(shape: BoxShape.circle, color: Colors.blue),
+                  child:
+                      IconButton(onPressed: () {}, icon: Icon(Icons.add_home)),
+                )
+              ],
+            )),
+            SizedBox(
+              height: 40,
+            ),
+            Container(
+              padding: EdgeInsets.all(25),
+              height: 400,
+              width: 300,
+              decoration: BoxDecoration(
+                  color: Colors.white54,
+                  borderRadius: BorderRadius.circular(30),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Color.fromARGB(115, 136, 134, 134),
+                        offset: Offset(6.1, 7.1),
+                        blurRadius: 5,
+                        spreadRadius: 3)
+                  ]),
+              child: Text(
+                "Saya Yuliyanti Arthamevia merupakan junior BackEnd Developer dan Mobile Developer di Bandung.",
+                maxLines: 20,
+                style: TextStyle(
+                  overflow: TextOverflow.ellipsis,
+                  fontSize: 20,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }

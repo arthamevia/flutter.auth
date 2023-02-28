@@ -1,11 +1,14 @@
 import 'dart:convert';
 
+// import 'package:examp/app/data/movies_response.dart';
+import 'package:examp/app/data/prof_response.dart';
 import 'package:get/get.dart';
 
 import '../../../data/headline_response.dart';
 import '../../../data/sports_response.dart';
 import '../../../data/technology_response.dart';
 import '../../../data/entertainment_response.dart';
+import 'package:http/http.dart' as http;
 import '../../../utils/api.dart';
 
 class DashboardController extends GetxController {
@@ -34,8 +37,19 @@ class DashboardController extends GetxController {
 	//mengembalikan data response dalam bentuk HeadlineResponse setelah di-decode dari JSON
   return TechnologyResponse.fromJson(jsonDecode(response.body));
 }
+//   Future<MoviesResponse> getMovies() async {
+	
+//   final response = await _getConnect.get(BaseUrl.movies);
+	
+//   return MoviesResponse.fromJson(jsonDecode(response.body));
+// }
     //TODO: Implement DashboardController
 
+Future<ProfResponse> getManga() async {
+    final response = await _getConnect.get(BaseUrl.prof2);
+    return ProfResponse.fromJson(
+        jsonDecode(response.body) as Map<String, dynamic>);
+  }
   final count = 0.obs;
   @override
   void onInit() {
